@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[Tema], explicado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+/* Apuntes explicados: una columna de lectura, cada concepto en tres capas (intuición · formal · aplicación), figuras del temario con su página y figuras propuestas marcadas */
+:root {
+  --bg: #ffffff; --fg: #17191c; --muted: #59616c; --rule: #cdd2d8; --hair: #e7eaee; --tint: #f5f6f8;
+  --accent: #1f4f8f; --accent-tint: #e9eef6;
+  --int: #8a5800; --int-tint: #fbf3e4;
+  --for: #1f4f8f; --for-tint: #eaf0f8;
+  --apl: #2b6a40; --apl-tint: #e7f2ea;
+  --warn: #9b2c2c; --warn-tint: #fbeaea;
+  --prop: #6b3fa0; --prop-tint: #f1ebf8;
+  --f-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131619; --fg: #e4e7eb; --muted: #a3abb6; --rule: #3a424c; --hair: #262c33; --tint: #1a1e23;
+    --accent: #8fb6ea; --accent-tint: #1b2634;
+    --int: #e2b56a; --int-tint: #2b2316; --for: #8fb6ea; --for-tint: #1b2634;
+    --apl: #8fd0a2; --apl-tint: #182a1e; --warn: #f0a3a3; --warn-tint: #2e1a1a;
+    --prop: #c4a6ec; --prop-tint: #251c31; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131619; --fg: #e4e7eb; --muted: #a3abb6; --rule: #3a424c; --hair: #262c33; --tint: #1a1e23;
+  --accent: #8fb6ea; --accent-tint: #1b2634;
+  --int: #e2b56a; --int-tint: #2b2316; --for: #8fb6ea; --for-tint: #1b2634;
+  --apl: #8fd0a2; --apl-tint: #182a1e; --warn: #f0a3a3; --warn-tint: #2e1a1a;
+  --prop: #c4a6ec; --prop-tint: #251c31; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--f-serif); font-size: 18px; line-height: 1.62;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 36px 72px; }
+.doc { max-width: 780px; margin: 0 auto; }
+.masthead { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--f-sans); font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--fg); padding-bottom: 10px; }
+h1 { font-size: clamp(32px, 5vw, 46px); line-height: 1.1; margin: 30px 0 8px; letter-spacing: -.01em; text-wrap: balance; }
+.sub { font-family: var(--f-sans); color: var(--muted); font-size: 15px; margin: 0 0 26px; }
+h2 { font-family: var(--f-sans); font-weight: 600; font-size: 23px; margin: 56px 0 6px; display: flex; gap: 12px; align-items: baseline; text-wrap: balance; }
+h2 .n { color: var(--accent); font-variant-numeric: tabular-nums; }
+h3 { font-family: var(--f-sans); font-weight: 600; font-size: 17px; margin: 30px 0 8px; }
+p { margin: 0 0 12px; }
+.src { font-family: var(--f-sans); font-size: 12px; color: var(--muted); letter-spacing: .02em; }
+.term { font-weight: 600; border-bottom: 1px dotted var(--muted); }
+
+/* Leyenda */
+.legend { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin: 0 0 14px; }
+.legend div { font-family: var(--f-sans); font-size: 13.5px; padding: 10px 12px; border-left: 3px solid; }
+.legend b { display: block; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+.lg-int { border-color: var(--int) !important; background: var(--int-tint); } .lg-int b { color: var(--int); }
+.lg-for { border-color: var(--for) !important; background: var(--for-tint); } .lg-for b { color: var(--for); }
+.lg-apl { border-color: var(--apl) !important; background: var(--apl-tint); } .lg-apl b { color: var(--apl); }
+.tags { font-family: var(--f-sans); font-size: 13px; color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+
+/* Capas */
+.layer { padding: 12px 16px 6px; margin: 10px 0; border-left: 3px solid; }
+.layer > .lbl { font-family: var(--f-sans); font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+.int { border-color: var(--int); background: var(--int-tint); } .int > .lbl { color: var(--int); }
+.for { border-color: var(--for); background: var(--for-tint); } .for > .lbl { color: var(--for); }
+.apl { border-color: var(--apl); background: var(--apl-tint); } .apl > .lbl { color: var(--apl); }
+.warn { border-left: 3px solid var(--warn); background: var(--warn-tint); padding: 10px 16px; margin: 12px 0; font-size: 16.5px; }
+.warn > b:first-child { font-family: var(--f-sans); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--warn); display: block; }
+.badge { font-family: var(--f-sans); font-size: 10.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 2px 7px; border: 1px solid currentColor; vertical-align: 2px; white-space: nowrap; }
+.b-tem { color: var(--muted); } .b-prop { color: var(--prop); background: var(--prop-tint); }
+
+/* Figuras */
+figure { margin: 18px 0 22px; }
+.figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 18px 0 22px; }
+.figs figure { margin: 0; }
+.fimg { background: #fff; border: 1px solid var(--rule); padding: 8px; display: flex; justify-content: center; align-items: center; }
+.fimg img { max-width: 100%; max-height: 260px; height: auto; display: block; }
+figcaption { font-family: var(--f-sans); font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
+figcaption b { color: var(--fg); }
+.svgbox { border: 1px solid var(--rule); background: var(--bg); overflow-x: auto; }
+.svgbox svg { display: block; width: 100%; height: auto; }
+
+/* Interactivos */
+.lab { border: 1px solid var(--prop); background: var(--prop-tint); padding: 14px 16px; margin: 18px 0 24px; }
+.lab h4 { font-family: var(--f-sans); font-size: 14px; margin: 0 0 10px; color: var(--prop); letter-spacing: .02em; }
+.lab-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.controls { display: grid; gap: 8px; font-family: var(--f-sans); font-size: 13.5px; }
+.controls label { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; }
+.controls input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--prop); }
+.controls output, .readout b { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.readout { font-family: var(--f-sans); font-size: 14px; display: grid; gap: 4px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--rule); }
+.readout .alert { color: var(--warn); font-weight: 600; }
+.lab svg { width: 100%; height: auto; display: block; background: var(--bg); border: 1px solid var(--rule); }
+.print-note { display: none; }
+
+/* SVG genérico */
+.ln { stroke: var(--fg); stroke-width: 1.6; fill: none; }
+.ln-thin { stroke: var(--muted); stroke-width: 1; fill: none; }
+.ln-dash { stroke: var(--muted); stroke-width: 1; fill: none; stroke-dasharray: 4 3; }
+.fill-soft { fill: var(--tint); stroke: var(--fg); stroke-width: 1.4; }
+.t { fill: var(--fg); font-family: var(--f-sans); font-size: 13px; }
+.t-s { fill: var(--muted); font-family: var(--f-sans); font-size: 11px; }
+.t-b { fill: var(--fg); font-family: var(--f-sans); font-size: 13px; font-weight: 600; }
+.v-red { stroke: #c0392b; stroke-width: 2.2; fill: none; } .h-red { fill: #c0392b; }
+.v-blue { stroke: #2563b0; stroke-width: 2.2; fill: none; } .h-blue { fill: #2563b0; }
+.v-green { stroke: #2b8a4b; stroke-width: 2.2; fill: none; } .h-green { fill: #2b8a4b; }
+.v-amber { stroke: #c27c00; stroke-width: 2.2; fill: none; } .h-amber { fill: #c27c00; }
+.v-prop { stroke: var(--prop); stroke-width: 2.2; fill: none; }
+.node { fill: var(--bg); stroke: var(--fg); stroke-width: 1.2; }
+.node-k { fill: var(--accent-tint); stroke: var(--accent); stroke-width: 1.5; }
+
+/* Receta, dudas, glosario */
+ol.steps { padding-left: 0; list-style: none; counter-reset: s; margin: 10px 0 16px; }
+ol.steps li { counter-increment: s; display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--hair); }
+ol.steps li::before { content: counter(s); font-family: var(--f-mono); color: var(--accent); font-weight: 500; }
+.table-wrap { overflow-x: auto; border-top: 2px solid var(--fg); border-bottom: 2px solid var(--fg); margin: 10px 0 18px; }
+table { width: 100%; border-collapse: collapse; font-family: var(--f-sans); font-size: 14px; min-width: 520px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--hair); vertical-align: top; }
+thead th { border-bottom: 1px solid var(--fg); font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+tbody tr:last-child td { border-bottom: 0; }
+dl.glos { display: grid; grid-template-columns: minmax(140px, 220px) minmax(0, 1fr); gap: 0; border-top: 1px solid var(--rule); margin: 10px 0; }
+dl.glos dt, dl.glos dd { margin: 0; padding: 8px 0; border-bottom: 1px solid var(--hair); }
+dl.glos dt { font-family: var(--f-sans); font-weight: 600; font-size: 14.5px; padding-right: 14px; }
+dl.glos dd { font-size: 16px; }
+.toc { columns: 2; column-gap: 28px; font-family: var(--f-sans); font-size: 14.5px; padding-left: 20px; margin: 8px 0 0; }
+.toc a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.katex { font-size: 1.04em; }
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+footer { margin-top: 56px; padding-top: 12px; border-top: 1px solid var(--rule); font-family: var(--f-sans); font-size: 12.5px; color: var(--muted); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  body { font-size: 17px; }
+  .legend { grid-template-columns: minmax(0,1fr); }
+  .lab-grid { grid-template-columns: minmax(0,1fr); }
+  .toc { columns: 1; }
+  dl.glos { grid-template-columns: minmax(0,1fr); }
+  dl.glos dt { border-bottom: 0; padding-bottom: 0; }
+}
+@page { size: A4; margin: 16mm 16mm 18mm; }
+@media print {
+  :root { --bg: #fff; --fg: #111; --muted: #555; --tint: #f5f6f8; }
+  body { padding: 0; font-size: 11pt; }
+  .doc { max-width: none; }
+  h2 { break-after: avoid; margin-top: 30px; }
+  h3 { break-after: avoid; }
+  .layer, figure, .lab, .warn, .figs figure, ol.steps li, tr { break-inside: avoid; }
+  .controls { display: none; }
+  .print-note { display: block; font-family: var(--f-sans); font-size: 9pt; color: var(--muted); margin-top: 6px; }
+  .lab-grid { grid-template-columns: 1.3fr 1fr; }
+  a { color: inherit; text-decoration: none; }
+}
+</style>
+</head>
+<body>
+<main class="doc">
+
+<!-- PLANTILLA de /explica-tema. Sustituye los [marcadores] y el ejemplo (Ley de Hooke) por el tema real.
+     Capas: .layer.int (intuición) · .layer.for (formal, notación del temario + página) · .layer.apl (aplicación).
+     Marcas: .badge.b-tem «Temario p. N» · .badge.b-prop «Propuesta». Laboratorios: .lab con controles + SVG generado en JS. -->
+
+<div class="masthead"><span>[Asignatura] · [Bloque]</span><span>[Tema] · explicado</span></div>
+<h1>[Tema], explicado</h1>
+<p class="sub">Versión explicada del tema de teoría ([N] páginas). No sustituye al original: lo acompaña. Las ecuaciones conservan la notación del temario, con su página entre corchetes.</p>
+
+<h2 class="nobreak"><span class="n">0</span>Cómo leer este documento</h2>
+<p>Cada concepto se explica en tres capas. Puedes leer solo la primera para entender la idea, o las tres para dominarla.</p>
+<div class="legend">
+  <div class="lg-int"><b>Intuición</b>La idea con palabras de todos los días o con una imagen mental.</div>
+  <div class="lg-for"><b>Formal</b>La definición y la ecuación tal como vienen en el temario.</div>
+  <div class="lg-apl"><b>Aplicación</b>Cómo se usa en un problema o dónde aparece en la realidad.</div>
+</div>
+<div class="tags"><span><span class="badge b-tem">Temario p. 4</span> figura o ecuación del tema original</span><span><span class="badge b-prop">Propuesta</span> figura, ejemplo o interactivo añadido en esta versión</span></div>
+
+<h3>Mapa del tema</h3>
+<p>[Una frase que diga cuáles son las grandes ideas del tema y cómo se relacionan.]</p>
+<figure>
+  <div class="svgbox">
+    <svg viewBox="0 0 760 150" role="img" aria-label="Mapa de ejemplo con tres conceptos encadenados">
+      <rect class="node-k" x="30" y="50" width="200" height="50" rx="4"/><text class="t-b" x="130" y="80" text-anchor="middle">[Concepto base]</text>
+      <rect class="node" x="280" y="50" width="200" height="50" rx="4"/><text class="t" x="380" y="80" text-anchor="middle">[Concepto que depende]</text>
+      <rect class="node" x="530" y="50" width="200" height="50" rx="4"/><text class="t" x="630" y="80" text-anchor="middle">[Aplicación]</text>
+      <line class="ln-thin" x1="230" y1="75" x2="280" y2="75"/><line class="ln-thin" x1="480" y1="75" x2="530" y2="75"/>
+    </svg>
+  </div>
+  <figcaption><b>Figura P1.</b> <span class="badge b-prop">Propuesta</span> Mapa de dependencias del tema.</figcaption>
+</figure>
+
+<h2 id="s1"><span class="n">1</span>Ejemplo: ley de Hooke</h2>
+<p class="src">Temario p. [N]</p>
+<div class="layer int"><span class="lbl">Intuición</span>
+<p>Un muelle «quiere» volver a su longitud natural, y tira con más fuerza cuanto más lo separas de ella. Ya lo estires o lo comprimas, la fuerza siempre apunta hacia la posición de reposo.</p>
+</div>
+<div class="layer for"><span class="lbl">Formal</span>
+<p>$$F = -kx, \qquad V = \tfrac12 k x^2$$</p>
+<p>\(k\): constante elástica [\(\mathrm{N\,m^{-1}}\)]; \(x\): elongación respecto a la longitud natural; \(V\): energía potencial elástica.</p>
+</div>
+<div class="warn"><b>Error típico</b>Usar como \(x\) la longitud total del muelle en lugar de lo que se ha estirado respecto a su longitud natural.</div>
+<div class="layer apl"><span class="lbl">Aplicación</span>
+<p>Las suspensiones de un tren de aterrizaje se modelan, en primera aproximación, como un muelle más un amortiguador: la rigidez \(k\) decide cuánto se comprime al tocar pista.</p>
+</div>
+
+<div class="figs">
+  <figure><div class="fimg"><svg viewBox="0 0 240 120" width="240" role="img" aria-label="Muelle unido a una pared y a un bloque"><line class="ln" x1="20" y1="20" x2="20" y2="100"/><path class="ln" d="M20 60 h20 l8 -14 l16 28 l16 -28 l16 28 l16 -28 l16 28 l8 -14 h20"/><rect class="fill-soft" x="156" y="40" width="50" height="40"/><text class="t" x="181" y="65" text-anchor="middle">m</text></svg></div><figcaption><b>Fig. T1.</b> <span class="badge b-tem">Temario p. [N]</span> [Las figuras recuperadas van como &lt;img src="figuras/…png"&gt;; este ejemplo es un SVG.]</figcaption></figure>
+</div>
+
+<div class="lab" id="lab-hooke">
+  <h4>Laboratorio · Fuerza y energía de un muelle <span class="badge b-prop">Propuesta · interactivo</span></h4>
+  <div class="lab-grid">
+    <svg id="hk-svg" viewBox="0 0 420 220" role="img" aria-label="Gráfica de la energía elástica frente a la elongación"></svg>
+    <div>
+      <div class="controls">
+        <label for="hk-k">Constante k <output id="o-k">200 N/m</output><input id="hk-k" type="range" min="50" max="500" value="200"></label>
+        <label for="hk-x">Elongación x <output id="o-x">0,10 m</output><input id="hk-x" type="range" min="-20" max="20" value="10"></label>
+      </div>
+      <div class="readout" id="hk-out"></div>
+      <p class="print-note">En papel: k = 200 N/m, x = 0,10 m.</p>
+    </div>
+  </div>
+</div>
+
+<h2 id="s2"><span class="n">2</span>Receta para resolver problemas <span class="badge b-prop">Propuesta</span></h2>
+<ol class="steps">
+<li><span>[Paso 1]</span></li>
+<li><span>[Paso 2]</span></li>
+</ol>
+
+<h2 id="s3"><span class="n">3</span>Dudas para el profesor</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>Página</th><th>Qué pone el temario</th><th>Por qué genera duda</th></tr></thead>
+<tbody><tr><td>1</td><td>[N]</td><td>[Cita]</td><td>[Razón; nunca se corrige en silencio]</td></tr></tbody>
+</table></div>
+
+<h2 id="s4"><span class="n">4</span>Glosario</h2>
+<dl class="glos">
+<dt>Constante elástica</dt><dd>\(k\): fuerza por unidad de elongación de un muelle.</dd>
+<dt>Elongación</dt><dd>Lo que se estira o comprime un muelle respecto a su longitud natural.</dd>
+</dl>
+
+<footer>Explicación de [Tema] de [Asignatura] para uso de estudio dentro de la asignatura. Las figuras marcadas «Temario» proceden del material oficial del curso; no publicar fuera de la asignatura.</footer>
+</main>
+
+<script>
+(function () {
+  function fmt(x, d) { return x.toLocaleString('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function txt(x, y, s, cls) { return '<text class="' + (cls || 't') + '" x="' + x + '" y="' + y + '">' + s + '</text>'; }
+  function hooke() {
+    var k = +document.getElementById('hk-k').value, x = +document.getElementById('hk-x').value / 100;
+    document.getElementById('o-k').textContent = k + ' N/m';
+    document.getElementById('o-x').textContent = fmt(x, 2) + ' m';
+    var x0 = 210, y0 = 190, W = 180, H = 160, Vmax = 0.5 * 500 * 0.04;
+    var X = function (u) { return x0 + u / 0.2 * W; }, Y = function (v) { return y0 - v / Vmax * H; };
+    var s = '<line class="ln-thin" x1="' + (x0 - W) + '" y1="' + y0 + '" x2="' + (x0 + W) + '" y2="' + y0 + '"/><line class="ln-thin" x1="' + x0 + '" y1="' + y0 + '" x2="' + x0 + '" y2="' + (y0 - H) + '"/>';
+    var d = '';
+    for (var n = 0; n <= 80; n++) { var u = -0.2 + n * 0.4 / 80; d += (n ? 'L' : 'M') + X(u).toFixed(1) + ' ' + Y(0.5 * k * u * u).toFixed(1); }
+    s += '<path class="v-prop" d="' + d + '"/><circle cx="' + X(x) + '" cy="' + Y(0.5 * k * x * x) + '" r="5" fill="#c0392b"/>';
+    s += txt(x0 + W - 30, y0 + 16, 'x (m)', 't-s') + txt(x0 + 6, y0 - H + 10, 'V (J)', 't-s');
+    document.getElementById('hk-svg').innerHTML = s;
+    document.getElementById('hk-out').innerHTML = '<div>Fuerza F = −kx = <b>' + fmt(-k * x, 1) + ' N</b></div><div>Energía V = ½kx² = <b>' + fmt(0.5 * k * x * x, 2) + ' J</b></div>';
+  }
+  ['hk-k', 'hk-x'].forEach(function (id) { document.getElementById(id).addEventListener('input', hooke); });
+  hooke();
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\(', right: '\\)', display: false }], throwOnError: false });
+  });
+})();
+</script>
+</body>
+</html>
