@@ -93,6 +93,27 @@ Si el destino es un vault de Obsidian, añade una nota corta con el PDF incrusta
 Entrega al usuario: dónde está, qué contiene (secciones, nº de figuras recuperadas y
 propuestas, laboratorios), las dudas para el profesor y lo que corrigió la revisión.
 
+## Salida en QMD (Quarto) para otra plataforma
+
+Si el perfil dice que el destino es una plataforma que maqueta QMD (Quarto/Pandoc) con un
+perfil restringido —sin HTML, sin scripts, sin imágenes propias—, escribe QMD en lugar
+del HTML de la plantilla y sigue el fichero de reglas que indique el perfil. Por defecto:
+
+| Skill | QMD |
+|---|---|
+| Intuición | `::: {.callout-tip}` |
+| Formal | texto normal con «Temario p. N» |
+| Aplicación | `::: {.callout-important}` |
+| Error típico | `::: {.callout-warning}` |
+| Duda para el profesor | `::: {.callout-note}` |
+| Figuras (temario y propuestas) | el mecanismo de figuras de la plataforma; si no admite imágenes, la descripción como texto |
+| Laboratorios | **gráficas calculadas** en PNG con varias curvas para varios valores del parámetro: lo que el laboratorio enseñaba moviendo un control, en una imagen |
+| Glosario | tabla de dos columnas |
+
+Valida el QMD con las comprobaciones reales de la plataforma antes de entregarlo (su
+validador y su maquetador, con la misma versión de Quarto), no a ojo. Si la plataforma no
+da estilo propio a `callout-tip`/`callout-important`, dilo: las capas se verán como texto.
+
 ## Derechos
 
 Las figuras y el texto del temario son del profesorado: el resultado es material de
